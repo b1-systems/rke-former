@@ -58,12 +58,19 @@ kubernetes.
 cd rke
 rke up
 # wait some minutes, a good chance to fetch a cup of coffee
+cd ..
 ```
 
 6) Use the kubeconfig
 
 ```bash=
-export KUBECONFIG=$PWD/kube_config_cluster.yml
+# set the kubeconfig 
+export KUBECONFIG=$PWD/rke/kube_config_cluster.yml
+
+# correct the API Endpoint to Loadbalancer-IP for control-plane
+kubectl config set clusters.local.server https://$(terraform output loadbalancer-cp):6443
+
+# list nodes
 kubectl get nodes --output wide
 ```
 
@@ -79,9 +86,8 @@ Fork -> Patch -> Pull request -> Merge
 
 # Author
 
-`Thorsten Schifferdecker <schifferdecker@b1-systems.de>`
+`Thorsten Schifferdecker` <schifferdecker@b1-systems.de>
 
 # License
 
 `GPL-3`
-
