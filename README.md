@@ -10,20 +10,27 @@ a full stack of Deployments : Kubernetes on OpenStack with the help of terraform
 - rke (1.0.1) [Download](https://github.com/rancher/rke/releases/tag/v1.0.1)
 - kubernetes-cli (v1.16.3+) [Overview of KubeBinaries](https://downloadkubernetes.com)
 
-2) Setup credentials for OpenStack
-
-Populate the OpenStack files clouds.yaml, secure.yaml and export the clouds var
-
-```bash=
-export OS_CLOUD=<section>
-```
-
-3) Get the code
+2) Get the code
 
 ```bash=
 git clone git@git.intern.b1-systems.de:schifferdecker/b1dod2020-kubernetes-deployments.git rke-former
 cd $_
 ```
+
+3) Setup credentials 
+
+- OpenStack
+  Populate the OpenStack files clouds.yaml, secure.yaml and export the clouds var
+
+  ```bash=
+  export OS_CLOUD=<section>
+  ```
+
+- Generate ssh-keys for deployment
+
+  ```bash=
+  ssh-keygen -f terraform
+  ```
 
 4) Start the terraforming
 
