@@ -28,11 +28,24 @@ cd $_
 4) Start the terraforming
 
 ```
+# init and download terraform plugins
 terraform init [<opts>]
+
+# set var for Kubernetes provider plugin
+export TF_VAR_openstack_auth_url=$(openstack configuration show -c auth.auth_url -f value)
+export TF_VAR_openstack_password=$(openstack configuration show -c auth.password -f value --unmask)
+
+# render the plan and graph 
 terraform plan [<opts>]
+
+# deploy
+terraform apply [<opts]
 ```
 
 5) Kubernetes Deployment via rke
+
+The terraform plan deploy all needed object in our infrastructure and template a config for the 
+kubernetes.
 
 ```bash=
 cd rke
