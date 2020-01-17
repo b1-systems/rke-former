@@ -63,7 +63,7 @@ rke up
 6) Use the kubeconfig
 
 ```bash=
-export KUBECONFIG=$PWD/k/kube_config_cluster.yml
+export KUBECONFIG=$PWD/kube_config_cluster.yml
 kubectl get nodes --output wide
 ```
 
