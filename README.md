@@ -1,93 +1,81 @@
-# b1dod2020-kubernetes-deployment
+# RKE-Former
 
-a full stack of Deployments : Kubernetes on OpenStack with the help of terraform and rke - called rke-former
+Kubernetes on OpenStack with the help of Terraform and Rancher RKE
 
-# Steps
+## Requirements
 
-1) Get needed binaries
+- [Terraform (v0.12+)](https://www.terraform.io/downloads.html)
+- [Rancher RKE (1.0.1)](https://github.com/rancher/rke/releases/tag/v1.0.1)
+- [Kubernetes CLI (v1.16.3+)](https://downloadkubernetes.com)
 
-- terraform (v0.12+) [Download](https://www.terraform.io/downloads.html)
-- rke (1.0.1) [Download](https://github.com/rancher/rke/releases/tag/v1.0.1)
-- kubernetes-cli (v1.16.3+) [Overview of KubeBinaries](https://downloadkubernetes.com)
+## Export OpenStack api url and user password
 
-2) Get the code
+Using `clouds.yaml`:
 
-```bash=
-git clone git@git.intern.b1-systems.de:schifferdecker/b1dod2020-kubernetes-deployments.git rke-former
-cd $_
-```
-
-3) Setup credentials 
-
-- OpenStack
-  Populate the OpenStack files clouds.yaml, secure.yaml and export the clouds var
-
-  ```bash=
-  export OS_CLOUD=<section>
-  ```
-
-- Generate ssh-keys for deployment
-
-  ```bash=
-  ssh-keygen -f terraform
-  ```
-
-4) Start the terraforming
-
-```
-# init and download terraform plugins
-terraform init [<opts>]
-
-# set var for Kubernetes provider plugin
+```shell
+export OS_CLOUD=<section>
 export TF_VAR_openstack_auth_url=$(openstack configuration show -c auth.auth_url -f value)
 export TF_VAR_openstack_password=$(openstack configuration show -c auth.password -f value --unmask)
-
-# render the plan and graph 
-terraform plan [<opts>]
-
-# deploy
-terraform apply [<opts]
 ```
 
-5) Kubernetes Deployment via rke
+Using `openrc.sh`:
 
-The terraform plan deploy all needed object in our infrastructure and template a config for the 
-kubernetes.
+```shell
+source openrc.sh
+export TF_VAR_openstack_auth_url=$OS_AUTH_URL
+export TF_VAR_openstack_password=$OS_PASSWORD
+```
 
-```bash=
-cd rke
+## Basic Configuration
+
+Set the number of Kubernetes master and worker nodes that should be deployed.
+
+```shell
+cat > terraform.tfvars <<EOF
+master_count = 1
+worker_count = 3
+EOF
+```
+
+## Deploy Kubernetes Nodes on OpenStack-Cloud
+
+```shell
+terraform init
+terraform apply -auto-approve
+```
+
+## Kubernetes Deployment via RKE
+
+```shell
 rke up
-# wait some minutes, a good chance to fetch a cup of coffee
-cd ..
 ```
 
-6) Use the kubeconfig
+## Use The kubeconfig
 
-```bash=
-# set the kubeconfig 
-export KUBECONFIG=$PWD/rke/kube_config_cluster.yml
+```shell
+export KUBECONFIG=$PWD/kube_config_cluster.yml
 
-# correct the API Endpoint to Loadbalancer-IP for control-plane
-kubectl config set clusters.local.server https://$(terraform output loadbalancer-cp):6443
+# correct the API endpoint to loadbalancer
+kubectl config set clusters.local.server $(terraform output k8s_api_url)
 
 # list nodes
 kubectl get nodes --output wide
 ```
 
-# Links
+## Links
 
 - RancherKubernetesEngine (rke) [Docs](https://rancher.com/docs/rke/latest/)
 - K8spin - a Kubernetes Namespace for free, check it out [K8spin](https://k8spin.cloud/)
 
-
-# Contribute
+## Contribute
 
 Fork -> Patch -> Pull request -> Merge
 
-# Author
+## Author
 
-`Thorsten Schifferdecker` <schifferdecker@b1-systems.de>
+- Thorsten Schifferdecker <schifferdecker@b1-systems.de>
+- Uwe Grawert <grawert@b1-systems.de>
 
-# License
+## License
 
-`GPL-3`
+[GPL-3](LICENSE)

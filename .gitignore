@@ -1,4 +1,12 @@
-#
+*.swp
+.venv
+id_rsa*
+*openrc.sh
 .terraform
 terraform*
 !terraform.tfvars
+.terraform.tfstate.lock.info
+ssh_config
+cluster.yml
+cluster.rkestate
+kube_config_cluster.yml

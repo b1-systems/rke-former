@@ -1,38 +1,49 @@
-# -- 
+---
 # RancherKubernetesEngine (rke) configuration file
-# WIP - for Demo use
-# --
 
-# bastionhost
-${bastionhost}
+bastion_host:
+  address: ${bastion_ip}
+  user: ${ssh_login_user}
+  ssh_key_path: ${ssh_identity_file}
 
-# kubernetes nodes
 nodes:
-${master}
-${worker}
+%{ for ip_address in master_ips ~}
+  - address: ${ip_address}
+    internal_address: ${ip_address}
+    user: ${ssh_login_user}
+    ssh_key_path: ${ssh_identity_file}
+    role:
+        - controlplane
+        - etcd
+%{ endfor ~}
+%{ for ip_address in worker_ips ~}
+  - address: ${ip_address}
+    internal_address: ${ip_address}
+    user: ${ssh_login_user}
+    ssh_key_path: ${ssh_identity_file}
+    role:
+        - worker
+%{ endfor ~}
 
-# network settings
 network:
   plugin: canal
   options: {}
 
 authentication:
-    strategy: x509
-    sans:
-      - "${loadbalancer-cp-floating-ip}"
+  strategy: x509
+  sans:
+    - "${api_ip_address}"
 
 services:
   kube-api:
     extra_args:  
-      external-hostname: ${loadbalancer-cp-floating-ip}
+      external-hostname: ${api_ip_address}
 
-# kubernetes version
 kubernetes_version: "v1.16.3-rancher1-1"
 
 # we use an ssh-agent
 ssh_agent_auth: true
 
-# cloud-provider
 cloud_provider:
   name: openstack
   openstackCloudProvider:
@@ -40,15 +51,14 @@ cloud_provider:
       auth-url: ${openstack_auth_url}
       username: ${openstack_username}
       password: ${openstack_password}
-      tenant-id: ${tenant_id}
-      domain-id: ${domain_id}
+      tenant-id: ${openstack_project_id}
+      domain-id: ${openstack_domain_id}
     load_balancer:
-      subnet-id: ${provider_openstack_lb_subnet}
+      subnet-id: ${subnet_id}
       manage-security-groups: true
     block_storage:
       ignore-volume-az: true
 
-# add more
 addons: |-
   ---
   apiVersion: storage.k8s.io/v1
@@ -58,3 +68,7 @@ addons: |-
     annotations:
       storageclass.kubernetes.io/is-default-class: true
   provisioner: kubernetes.io/cinder
+
+private_registries:
+  - url: docker.io
+    is_default: true

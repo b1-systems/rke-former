@@ -1,0 +1,82 @@
+variable "prefix" {
+  description = "Prefix for OpenStack resource object names"
+  default = "k8s"
+}
+
+variable "master_count" {
+  description = "Amount of master nodes to spawn up"
+  default = 1
+}
+
+variable "worker_count" {
+  description = "Amount of worker nodes to spawn up"
+  default = 1
+}
+
+variable "kubernetes_api_port" {
+  description = "Kubernetes API port"
+  default = 6443
+}
+
+variable "openstack_auth_url" {
+  description = "OpenStack auth_url for Kubernetes Provider Plugin"
+
+}
+variable "openstack_password" {
+  description = "OpenStack Password for Kubernetes Provider Plugin"
+}
+
+variable "cluster_network_cidr" {
+  description = "Kubernetes cluster network address"
+  default = "10.0.10.0/24"
+}
+
+variable "external_network_name" {
+  description = "Name of public external network"
+  default = "b1systems-public"
+}
+
+variable "external_network_id" {
+  description = "ID of public external network"
+  default = "f35be981-dd80-4eaf-bf49-51deaf85fec5"
+}
+
+variable "ssh_identity_file" {
+  description = "Location of SSH identity file"
+  default = "~/.ssh/id_rsa"
+}
+
+variable "ssh_pubkey_file" {
+  description = "Location of SSH pubkey file"
+  default = "~/.ssh/id_rsa.pub"
+}
+
+variable "ssh_login_user" {
+  description = "Default login user for cluster nodes"
+  default = "rancher"
+}
+
+variable "flavor_bastion" {
+  description = "The instance flavor used to create bastion host"
+  default = "1C-512MB-10GB"
+}
+
+variable "flavor_master" {
+  description = "The instance flavor used to create master nodes"
+  default = "1C-2GB-10GB"
+}
+
+variable "flavor_worker" {
+  description = "The instance flavor used to create worker nodes"
+  default = "2C-4GB-10GB"
+}
+
+variable "image_bastion" {
+  description = "The image used to create bastion host"
+  default = "Ubuntu Minimal 18.04"
+}
+
+variable "image_nodes" {
+  description = "The image used to create Kubernetes node instances"
+  default = "RancherOS 1.5.5"
+}
