@@ -33,12 +33,12 @@ variable "cluster_network_cidr" {
 
 variable "external_network_name" {
   description = "Name of public external network"
-  default = "b1systems-public"
+  default = "external"
 }
 
 variable "external_network_id" {
   description = "ID of public external network"
-  default = "f35be981-dd80-4eaf-bf49-51deaf85fec5"
+  default = "293bea64-1572-4016-b002-2da2060a888e"
 }
 
 variable "ssh_identity_file" {
@@ -73,7 +73,7 @@ variable "flavor_worker" {
 
 variable "image_bastion" {
   description = "The image used to create bastion host"
-  default = "Ubuntu Minimal 18.04"
+  default = "Ubuntu Minimal 20.04"
 }
 
 variable "image_nodes" {
