@@ -44,6 +44,12 @@ terraform init
 terraform apply -auto-approve
 ```
 
+## Test SSH connection to bastion host
+
+```shell
+ssh -F ssh_config bastion
+```
+
 ## Kubernetes Deployment via RKE
 
 ```shell
