@@ -1,6 +1,6 @@
 variable "prefix" {
   description = "Prefix for OpenStack resource object names"
-  default = "k8s"
+  default = "rke"
 }
 
 variable "master_count" {
