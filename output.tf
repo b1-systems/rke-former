@@ -27,9 +27,3 @@ resource "local_file" "cluster_config" {
     ssh_identity_file = var.ssh_identity_file
   })
 }
-
-output "k8s_api_url" {
-  value = format("https://%s:%s",
-                 openstack_networking_floatingip_v2.k8s_cluster.address,
-                 var.kubernetes_api_port)
-}
