@@ -55,6 +55,9 @@ ssh -F ssh_config bastion
 
 ## Kubernetes Deployment via RKE
 
+Before running _rke_ command make sure your ssh-key is added to your ssh-agent,
+so _rke_ can connect to all hosts through the bastion host.
+
 ```shell
 rke up
 ```
