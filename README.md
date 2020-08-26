@@ -32,8 +32,11 @@ Set the number of Kubernetes master and worker nodes that should be deployed.
 
 ```shell
 cat > terraform.tfvars <<EOF
+prefix = "rke"
 master_count = 1
 worker_count = 3
+ssh_identity_file = "~/.ssh/YOUR_SSH_KEY"
+ssh_pubkey_file = "~/.ssh/YOUR_SSH_KEY_PUB"
 EOF
 ```
 
