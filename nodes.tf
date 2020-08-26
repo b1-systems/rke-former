@@ -30,6 +30,7 @@ resource "openstack_compute_instance_v2" "bastion" {
   config_drive = true
   security_groups = ["default", openstack_networking_secgroup_v2.ssh.name]
   network { name = openstack_networking_network_v2.cluster_network.name }
+  availability_zone_hints = var.availability_zone
 }
 
 resource "openstack_networking_floatingip_v2" "bastion" {
@@ -52,6 +53,7 @@ resource "openstack_compute_instance_v2" "master" {
   user_data = data.template_cloudinit_config.nodes.rendered
   security_groups = ["default"]
   network { name = openstack_networking_network_v2.cluster_network.name }
+  availability_zone_hints = var.availability_zone
 }
 
 resource "openstack_compute_instance_v2" "worker" {
@@ -64,4 +66,5 @@ resource "openstack_compute_instance_v2" "worker" {
   config_drive = true
   security_groups = ["default"]
   network { name = openstack_networking_network_v2.cluster_network.name }
+  availability_zone_hints = var.availability_zone
 }
