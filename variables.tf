@@ -13,8 +13,13 @@ variable "worker_count" {
   default = 1
 }
 
-variable "availability_zone" {
-  description = "Availability zone to use"
+variable "availability_zone_compute" {
+  description = "Availability zone to use for compute resources"
+  default = "south-2"
+}
+
+variable "availability_zone_network" {
+  description = "Availability zone to use for network resources"
   default = "south-2"
 }
 
