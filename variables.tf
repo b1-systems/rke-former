@@ -41,6 +41,11 @@ variable "cluster_network_cidr" {
   default = "10.0.10.0/24"
 }
 
+variable "cluster_network_mtu" {
+  description = "MTU for Kubernetes cluster network"
+  default = "1400"
+}
+
 variable "external_network_name" {
   description = "Name of public external network"
   default = "external"

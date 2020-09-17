@@ -1,6 +1,7 @@
 resource "openstack_networking_network_v2" "cluster_network" {
   name = "${var.prefix}-cluster-network"
   admin_state_up = true
+  mtu = var.cluster_network_mtu
   availability_zone_hints = [var.availability_zone_network]
 }
 
