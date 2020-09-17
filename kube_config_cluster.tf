@@ -15,5 +15,6 @@ resource "local_file" "cluster_config" {
     openstack_domain_id = data.openstack_identity_auth_scope_v3.scope.project_domain_id
     ssh_login_user = var.ssh_login_user
     ssh_identity_file = var.ssh_identity_file
+    kubernetes_version = var.kubernetes_version
   })
 }

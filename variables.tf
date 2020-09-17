@@ -13,6 +13,11 @@ variable "worker_count" {
   default = 1
 }
 
+variable "kubernetes_version" {
+  description = "RKE supported Kubernetes to install"
+  default = "v1.18.8-rancher1-1"
+}
+
 variable "availability_zone_compute" {
   description = "Availability zone to use for compute resources"
   default = "south-2"

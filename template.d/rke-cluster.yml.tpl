@@ -39,7 +39,7 @@ services:
     extra_args:  
       external-hostname: ${api_ip_address}
 
-kubernetes_version: "v1.16.3-rancher1-1"
+kubernetes_version: "${kubernetes_version}"
 
 # we use an ssh-agent
 ssh_agent_auth: true
