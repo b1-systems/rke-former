@@ -23,14 +23,24 @@ data "template_cloudinit_config" "nodes" {
 
 resource "openstack_compute_instance_v2" "bastion" {
   name = "${var.prefix}-bastion"
+  config_drive = true
   image_name = var.image_bastion
   flavor_name = var.flavor_bastion
   key_pair = openstack_compute_keypair_v2.ssh_key.name
   user_data = data.template_cloudinit_config.nodes.rendered
-  config_drive = true
-  security_groups = ["default", openstack_networking_secgroup_v2.ssh.name]
-  network { name = openstack_networking_network_v2.cluster_network.name }
   availability_zone_hints = var.availability_zone_compute
+  network { port = openstack_networking_port_v2.bastion.id }
+}
+
+resource "openstack_networking_port_v2" "bastion" {
+  name = "${var.prefix}-bastion"
+  network_id = openstack_networking_network_v2.cluster_network.id
+  security_group_ids = [openstack_networking_secgroup_v2.ssh.id]
+  dns_name = "bastion"
+
+  fixed_ip {
+    subnet_id = openstack_networking_subnet_v2.cluster_network.id
+  }
 }
 
 resource "openstack_networking_floatingip_v2" "bastion" {
@@ -51,20 +61,48 @@ resource "openstack_compute_instance_v2" "master" {
   flavor_name = var.flavor_master
   key_pair = openstack_compute_keypair_v2.ssh_key.name
   user_data = data.template_cloudinit_config.nodes.rendered
-  security_groups = ["default"]
-  network { name = openstack_networking_network_v2.cluster_network.name }
   availability_zone_hints = var.availability_zone_compute
+  network { port = openstack_networking_port_v2.master[count.index].id }
+}
+
+resource "openstack_networking_port_v2" "master" {
+  count = var.master_count
+  name = format("%s-master-%02d", var.prefix, count.index+1)
+  dns_name = format("%s-master-%02d", var.prefix, count.index+1)
+  network_id = openstack_networking_network_v2.cluster_network.id
+  security_group_ids = [
+    openstack_networking_secgroup_v2.ssh.id,
+    openstack_networking_secgroup_v2.k8s_api.id
+    ]
+
+  fixed_ip {
+    subnet_id = openstack_networking_subnet_v2.cluster_network.id
+  }
 }
 
 resource "openstack_compute_instance_v2" "worker" {
   count = var.worker_count
   name = format("%s-worker-%02d", var.prefix, count.index+1)
+  config_drive = true
   image_name = var.image_nodes
   flavor_name = var.flavor_worker
   key_pair = openstack_compute_keypair_v2.ssh_key.name
   user_data = data.template_cloudinit_config.nodes.rendered
-  config_drive = true
-  security_groups = ["default"]
-  network { name = openstack_networking_network_v2.cluster_network.name }
   availability_zone_hints = var.availability_zone_compute
+  network { port = openstack_networking_port_v2.worker[count.index].id }
+}
+
+resource "openstack_networking_port_v2" "worker" {
+  count = var.worker_count
+  name = format("%s-worker-%02d", var.prefix, count.index+1)
+  dns_name = format("%s-worker-%02d", var.prefix, count.index+1)
+  network_id = openstack_networking_network_v2.cluster_network.id
+  security_group_ids = [
+    openstack_networking_secgroup_v2.ssh.id,
+    openstack_networking_secgroup_v2.docker_proxy.id,
+    ]
+
+  fixed_ip {
+    subnet_id = openstack_networking_subnet_v2.cluster_network.id
+  }
 }

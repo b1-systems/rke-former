@@ -55,3 +55,18 @@ resource "openstack_networking_secgroup_rule_v2" "k8s_api" {
   port_range_min = var.kubernetes_api_port
   port_range_max = var.kubernetes_api_port
 }
+
+### Docker proxy
+resource "openstack_networking_secgroup_v2" "docker_proxy" {
+  name = "${var.prefix}-docker-proxy"
+  description = "Docker proxy"
+}
+
+resource "openstack_networking_secgroup_rule_v2" "docker_proxy" {
+  security_group_id = openstack_networking_secgroup_v2.docker_proxy.id
+  direction = "ingress"
+  ethertype = "IPv4"
+  protocol = "tcp"
+  port_range_min = 10250
+  port_range_max = 10250
+}
