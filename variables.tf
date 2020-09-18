@@ -98,5 +98,5 @@ variable "image_bastion" {
 
 variable "image_nodes" {
   description = "The image used to create Kubernetes node instances"
-  default = "RancherOS 1.5.6"
+  default = "Ubuntu Minimal 20.04"
 }
