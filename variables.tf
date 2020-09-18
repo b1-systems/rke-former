@@ -18,12 +18,12 @@ variable "kubernetes_version" {
   default = "v1.18.8-rancher1-1"
 }
 
-variable "availability_zone_compute" {
+variable "availability_zone_hints_compute" {
   description = "Availability zone to use for compute resources"
   default = "south-2"
 }
 
-variable "availability_zone_network" {
+variable "availability_zone_hints_network" {
   description = "Availability zone to use for network resources"
   default = "south-2"
 }
@@ -52,12 +52,12 @@ variable "cluster_network_mtu" {
 }
 
 variable "external_network_name" {
-  description = "Name of public external network"
+  description = "Name of external network making the cluster reachable via FIP"
   default = "external"
 }
 
 variable "external_network_id" {
-  description = "ID of public external network"
+  description = "ID of external network"
   default = "293bea64-1572-4016-b002-2da2060a888e"
 }
 
@@ -99,4 +99,9 @@ variable "image_bastion" {
 variable "image_nodes" {
   description = "The image used to create Kubernetes node instances"
   default = "Ubuntu Minimal 20.04"
+}
+
+variable "trusted_ca_certs" {
+  description = "File with trusted CA certificates in PEM format"
+  default = "ca-certs.pem"
 }

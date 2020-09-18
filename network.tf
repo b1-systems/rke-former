@@ -2,7 +2,7 @@ resource "openstack_networking_network_v2" "cluster_network" {
   name = "${var.prefix}-cluster-network"
   admin_state_up = true
   mtu = var.cluster_network_mtu
-  availability_zone_hints = [var.availability_zone_network]
+  availability_zone_hints = [var.availability_zone_hints_network]
 }
 
 resource "openstack_networking_subnet_v2" "cluster_network" {
@@ -18,7 +18,7 @@ resource "openstack_networking_router_v2" "external" {
   name = "${var.prefix}-external"
   admin_state_up = true
   external_network_id = var.external_network_id
-  availability_zone_hints = [var.availability_zone_network]
+  availability_zone_hints = [var.availability_zone_hints_network]
 }
 
 resource "openstack_networking_router_interface_v2" "external" {

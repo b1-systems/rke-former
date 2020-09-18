@@ -27,6 +27,7 @@ resource "openstack_lb_pool_v2" "k8s_api" {
 
 resource "openstack_lb_member_v2" "k8s_api" {
   count = var.master_count
+  name = format("%s-k8s-api-member-%02d", var.prefix, count.index+1)
   address = openstack_compute_instance_v2.master[count.index].access_ip_v4
   protocol_port = var.kubernetes_api_port
   pool_id = openstack_lb_pool_v2.k8s_api.id
@@ -109,6 +110,7 @@ resource "openstack_lb_pool_v2" "ingress_https" {
 
 resource "openstack_lb_member_v2" "ingress_https" {
   count = var.worker_count
+  name = format("%s-ingress-https-member-%02d", var.prefix, count.index+1)
   address = openstack_compute_instance_v2.worker[count.index].access_ip_v4
   protocol_port = 443
   pool_id = openstack_lb_pool_v2.ingress_https.id
