@@ -5,6 +5,7 @@ data "template_file" "cloud_config_master" {
     hostname = format("%s-master-%02d", var.prefix, count.index+1)
     ssh_login_user = var.ssh_login_user
     ssh_pubkey = file(var.ssh_pubkey_file)
+    hosts = fileexists(var.hosts) ? file(var.hosts) : ""
     trusted_ca_certs = fileexists(var.trusted_ca_certs) ? file(var.trusted_ca_certs) : ""
   }
 }

@@ -101,6 +101,11 @@ variable "image_nodes" {
   default = "Ubuntu Minimal 20.04"
 }
 
+variable "hosts" {
+  description = "Unix hosts file to include on master and worker nodes"
+  default = "hosts"
+}
+
 variable "trusted_ca_certs" {
   description = "File with trusted CA certificates in PEM format"
   default = "ca-certs.pem"

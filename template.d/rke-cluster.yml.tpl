@@ -35,6 +35,14 @@ authentication:
     - "${api_ip_address}"
 
 services:
+%{ if trusted_ca_certs != "" ~}
+  kube-controller:
+    extra_binds:
+      - "/usr/share/ca-certificates:/usr/share/ca-certificates"
+  kubelet:
+    extra_binds:
+      - "/usr/share/ca-certificates:/usr/share/ca-certificates"
+%{ endif ~}
   kube-api:
     extra_args:  
       external-hostname: ${api_ip_address}
@@ -53,6 +61,9 @@ cloud_provider:
       password: ${openstack_password}
       tenant-id: ${openstack_project_id}
       domain-id: ${openstack_domain_id}
+%{ if trusted_ca_certs != "" ~}
+      ca-file: /usr/share/ca-certificates/cloud-init-ca-certs.crt
+%{ endif ~}
     load_balancer:
       subnet-id: ${subnet_id}
       manage-security-groups: true
