@@ -26,7 +26,7 @@ resource "openstack_compute_instance_v2" "bastion" {
   flavor_name = var.flavor_bastion
   key_pair = openstack_compute_keypair_v2.ssh_key.name
   user_data = data.template_cloudinit_config.bastion.rendered
-  availability_zone_hints = var.availability_zone_hints_compute
+  availability_zone_hints = var.availability_zone_hints_compute[0]
   network { port = openstack_networking_port_v2.bastion.id }
 }
 

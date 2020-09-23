@@ -29,7 +29,7 @@ resource "openstack_compute_instance_v2" "worker" {
   flavor_name = var.flavor_worker
   key_pair = openstack_compute_keypair_v2.ssh_key.name
   user_data = data.template_cloudinit_config.worker[count.index].rendered
-  availability_zone_hints = var.availability_zone_hints_compute
+  availability_zone_hints = var.availability_zone_hints_compute[count.index % length(var.availability_zone_hints_compute)]
   network { port = openstack_networking_port_v2.worker[count.index].id }
 }
 

@@ -20,12 +20,22 @@ variable "kubernetes_version" {
 
 variable "availability_zone_hints_compute" {
   description = "Availability zone to use for compute resources"
-  default = "south-2"
+  default = ["south-2"]
 }
 
 variable "availability_zone_hints_network" {
   description = "Availability zone to use for network resources"
-  default = "south-2"
+  default = ["south-2"]
+}
+
+variable "etcd_client" {
+  description = "Client port for etcd-cluster"
+  default = 2379
+}
+
+variable "etcd_peer" {
+  description = "Peer port for etcd-cluster"
+  default = 2380
 }
 
 variable "kubernetes_api_port" {

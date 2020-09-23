@@ -29,7 +29,7 @@ resource "openstack_compute_instance_v2" "master" {
   flavor_name = var.flavor_master
   key_pair = openstack_compute_keypair_v2.ssh_key.name
   user_data = data.template_cloudinit_config.master[count.index].rendered
-  availability_zone_hints = var.availability_zone_hints_compute
+  availability_zone_hints = var.availability_zone_hints_compute[count.index % length(var.availability_zone_hints_compute)]
   network { port = openstack_networking_port_v2.master[count.index].id }
 }
 
@@ -40,7 +40,8 @@ resource "openstack_networking_port_v2" "master" {
   network_id = openstack_networking_network_v2.cluster_network.id
   security_group_ids = [
     openstack_networking_secgroup_v2.ssh.id,
-    openstack_networking_secgroup_v2.k8s_api.id
+    openstack_networking_secgroup_v2.k8s_api.id,
+    openstack_networking_secgroup_v2.etcd.id
     ]
 
   fixed_ip {
