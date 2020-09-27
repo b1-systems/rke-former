@@ -27,18 +27,8 @@ resource "openstack_compute_instance_v2" "bastion" {
   key_pair = openstack_compute_keypair_v2.ssh_key.name
   user_data = data.template_cloudinit_config.bastion.rendered
   availability_zone_hints = var.availability_zone_hints_compute[0]
-  network { port = openstack_networking_port_v2.bastion.id }
-}
-
-resource "openstack_networking_port_v2" "bastion" {
-  name = "${var.prefix}-bastion"
-  network_id = openstack_networking_network_v2.cluster_network.id
-  security_group_ids = [openstack_networking_secgroup_v2.ssh.id]
-  dns_name = "${var.prefix}-bastion"
-
-  fixed_ip {
-    subnet_id = openstack_networking_subnet_v2.cluster_network.id
-  }
+  network { uuid = openstack_networking_network_v2.cluster_network.id }
+  security_groups = [ "default", openstack_networking_secgroup_v2.ssh.name ]
 }
 
 resource "openstack_networking_floatingip_v2" "bastion" {

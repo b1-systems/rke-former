@@ -28,16 +28,6 @@ variable "availability_zone_hints_network" {
   default = ["south-2"]
 }
 
-variable "etcd_client" {
-  description = "Client port for etcd-cluster"
-  default = 2379
-}
-
-variable "etcd_peer" {
-  description = "Peer port for etcd-cluster"
-  default = 2380
-}
-
 variable "kubernetes_api_port" {
   description = "Kubernetes API port"
   default = 6443

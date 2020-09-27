@@ -40,20 +40,6 @@ resource "openstack_networking_secgroup_rule_v2" "ssh" {
   port_range_min = 22
   port_range_max = 22
 }
-### etcd
-resource "openstack_networking_secgroup_v2" "etcd" {
-  name = "${var.prefix}-etcd"
-  description = "etcd cluster communication"
-}
-
-resource "openstack_networking_secgroup_rule_v2" "etcd" {
-  security_group_id = openstack_networking_secgroup_v2.etcd.id
-  direction = "ingress"
-  ethertype = "IPv4"
-  protocol = "tcp"
-  port_range_min = var.etcd_client
-  port_range_max = var.etcd_peer
-}
 
 ### K8s API
 resource "openstack_networking_secgroup_v2" "k8s_api" {
@@ -68,19 +54,4 @@ resource "openstack_networking_secgroup_rule_v2" "k8s_api" {
   protocol = "tcp"
   port_range_min = var.kubernetes_api_port
   port_range_max = var.kubernetes_api_port
-}
-
-### Docker proxy
-resource "openstack_networking_secgroup_v2" "docker_proxy" {
-  name = "${var.prefix}-docker-proxy"
-  description = "Docker proxy"
-}
-
-resource "openstack_networking_secgroup_rule_v2" "docker_proxy" {
-  security_group_id = openstack_networking_secgroup_v2.docker_proxy.id
-  direction = "ingress"
-  ethertype = "IPv4"
-  protocol = "tcp"
-  port_range_min = 10250
-  port_range_max = 10250
 }

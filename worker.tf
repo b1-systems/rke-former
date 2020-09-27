@@ -30,20 +30,6 @@ resource "openstack_compute_instance_v2" "worker" {
   key_pair = openstack_compute_keypair_v2.ssh_key.name
   user_data = data.template_cloudinit_config.worker[count.index].rendered
   availability_zone_hints = var.availability_zone_hints_compute[count.index % length(var.availability_zone_hints_compute)]
-  network { port = openstack_networking_port_v2.worker[count.index].id }
-}
-
-resource "openstack_networking_port_v2" "worker" {
-  count = var.worker_count
-  name = format("%s-worker-%02d", var.prefix, count.index+1)
-  dns_name = format("%s-worker-%02d", var.prefix, count.index+1)
-  network_id = openstack_networking_network_v2.cluster_network.id
-  security_group_ids = [
-    openstack_networking_secgroup_v2.ssh.id,
-    openstack_networking_secgroup_v2.docker_proxy.id
-    ]
-
-  fixed_ip {
-    subnet_id = openstack_networking_subnet_v2.cluster_network.id
-  }
+  network { uuid = openstack_networking_network_v2.cluster_network.id }
+  security_groups = [ "default" ]
 }
