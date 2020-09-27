@@ -70,16 +70,6 @@ cloud_provider:
     block_storage:
       ignore-volume-az: true
 
-addons: |-
-  ---
-  apiVersion: storage.k8s.io/v1
-  kind: StorageClass
-  metadata:
-    name: bc-default
-    annotations:
-      storageclass.kubernetes.io/is-default-class: true
-  provisioner: kubernetes.io/cinder
-
 private_registries:
   - url: docker.io
     is_default: true
