@@ -31,5 +31,7 @@ resource "openstack_compute_instance_v2" "worker" {
   user_data = data.template_cloudinit_config.worker[count.index].rendered
   availability_zone_hints = var.availability_zone_hints_compute[count.index % length(var.availability_zone_hints_compute)]
   network { uuid = openstack_networking_network_v2.cluster_network.id }
-  security_groups = [ "default" ]
+  security_groups = [ "default",
+                      openstack_networking_secgroup_v2.k8s_nodeport_range.name
+                    ]
 }

@@ -55,3 +55,18 @@ resource "openstack_networking_secgroup_rule_v2" "k8s_api" {
   port_range_min = var.kubernetes_api_port
   port_range_max = var.kubernetes_api_port
 }
+
+### K8s NodePort range
+resource "openstack_networking_secgroup_v2" "k8s_nodeport_range" {
+  name = "${var.prefix}-k8s_nodeport_range"
+  description = "Kubernetes NodePort Ingress"
+}
+
+resource "openstack_networking_secgroup_rule_v2" "k8s_nodeport_range" {
+  security_group_id = openstack_networking_secgroup_v2.k8s_api.id
+  direction = "ingress"
+  ethertype = "IPv4"
+  protocol = "tcp"
+  port_range_min = var.kubernetes_nodeport_range_min
+  port_range_max = var.kubernetes_nodeport_range_max
+}

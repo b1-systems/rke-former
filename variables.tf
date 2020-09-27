@@ -33,6 +33,16 @@ variable "kubernetes_api_port" {
   default = 6443
 }
 
+variable "kubernetes_nodeport_range_min" {
+  description = "Kubernetes NodePort range lower end"
+  default = 30000
+}
+
+variable "kubernetes_nodeport_range_max" {
+  description = "Kubernetes NodePort range upper end"
+  default = 32767
+}
+
 variable "openstack_auth_url" {
   description = "OpenStack auth_url for Kubernetes Provider Plugin"
 
