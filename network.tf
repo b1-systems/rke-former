@@ -56,6 +56,30 @@ resource "openstack_networking_secgroup_rule_v2" "k8s_api" {
   port_range_max = var.kubernetes_api_port
 }
 
+### Ingress
+resource "openstack_networking_secgroup_v2" "k8s_ingress" {
+  name = "${var.prefix}-k8s-ingress"
+  description = "Kubernetes Ingress"
+}
+
+resource "openstack_networking_secgroup_rule_v2" "k8s_ingress_http" {
+  security_group_id = openstack_networking_secgroup_v2.k8s_ingress.id
+  direction = "ingress"
+  ethertype = "IPv4"
+  protocol = "tcp"
+  port_range_min = 80
+  port_range_max = 80
+}
+
+resource "openstack_networking_secgroup_rule_v2" "k8s_ingress_https" {
+  security_group_id = openstack_networking_secgroup_v2.k8s_ingress.id
+  direction = "ingress"
+  ethertype = "IPv4"
+  protocol = "tcp"
+  port_range_min = 443
+  port_range_max = 443
+}
+
 ### K8s NodePort range
 resource "openstack_networking_secgroup_v2" "k8s_nodeport_range" {
   name = "${var.prefix}-k8s_nodeport_range"

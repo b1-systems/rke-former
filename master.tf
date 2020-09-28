@@ -33,6 +33,7 @@ resource "openstack_compute_instance_v2" "master" {
   network { uuid = openstack_networking_network_v2.cluster_network.id }
   security_groups = [ "default",
                       openstack_networking_secgroup_v2.k8s_api.name,
+                      openstack_networking_secgroup_v2.k8s_ingress.name,
                       openstack_networking_secgroup_v2.k8s_nodeport_range.name
                     ]
 }

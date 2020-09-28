@@ -66,6 +66,11 @@ cloud_provider:
 %{ endif ~}
     load_balancer:
       subnet-id: ${subnet_id}
+      use-octavia: true
+      create-monitor: true
+      monitor-delay: "5s"
+      monitor-timeout: "60s"
+      monitor-max-retries: 5
       manage-security-groups: true
     block_storage:
       ignore-volume-az: true
