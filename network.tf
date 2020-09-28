@@ -59,7 +59,7 @@ resource "openstack_networking_secgroup_rule_v2" "k8s_api" {
 ### Ingress
 resource "openstack_networking_secgroup_v2" "k8s_ingress" {
   name = "${var.prefix}-k8s-ingress"
-  description = "Kubernetes Ingress"
+  description = "Kubernetes Workload Ingress"
 }
 
 resource "openstack_networking_secgroup_rule_v2" "k8s_ingress_http" {
