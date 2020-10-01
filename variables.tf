@@ -18,14 +18,24 @@ variable "kubernetes_version" {
   default = "v1.18.8-rancher1-1"
 }
 
+variable "external_network_name" {
+  description = "Name of external network making the cluster reachable via FIP"
+  default = "external"
+}
+
+variable "external_network_id" {
+  description = "ID of external network"
+  default = "293bea64-1572-4016-b002-2da2060a888e"
+}
+
 variable "availability_zone_hints_compute" {
   description = "Availability zone to use for compute resources"
-  default = ["south-2"]
+  default = ["nova"]
 }
 
 variable "availability_zone_hints_network" {
   description = "Availability zone to use for network resources"
-  default = ["south-2"]
+  default = ["nova"]
 }
 
 variable "use_octavia" {
@@ -68,18 +78,9 @@ variable "cluster_network_cidr" {
 
 variable "cluster_network_mtu" {
   description = "MTU for Kubernetes cluster network"
-  default = "1400"
+  default = "1450"
 }
 
-variable "external_network_name" {
-  description = "Name of external network making the cluster reachable via FIP"
-  default = "external"
-}
-
-variable "external_network_id" {
-  description = "ID of external network"
-  default = "293bea64-1572-4016-b002-2da2060a888e"
-}
 
 variable "ssh_identity_file" {
   description = "Location of SSH identity file"
@@ -129,4 +130,19 @@ variable "hosts" {
 variable "trusted_ca_certs" {
   description = "File with trusted CA certificates in PEM format"
   default = "ca-certs.pem"
+}
+
+variable "additional_routes" {
+  description = "Define routes to additional networks"
+  default = {}
+  type = map(
+    object({
+      # ID of additional network
+      network_id = string
+      # Network CIDR of the additional network (example: 172.16.100.0/24)
+      network_cidr = string
+      # Router IP in the Kubernetes cluster network (example: 10.0.10.5)
+      router_ip_address = string
+    })
+  )
 }

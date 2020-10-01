@@ -1,6 +1,6 @@
 ### K8s Cluster Loadbalancer
 resource "openstack_lb_loadbalancer_v2" "k8s_cluster" {
-  name = "${var.prefix}-k8s-cluster"
+  name = "${var.prefix}-k8s-api"
   vip_subnet_id = openstack_networking_subnet_v2.cluster_network.id
   description = "Loadbalancer for Kubernetes Cluster API"
 }
@@ -52,7 +52,7 @@ output "k8s_api_url" {
 
 ### Service Ingress Loadbalancer
 resource "openstack_lb_loadbalancer_v2" "ingress" {
-  name = "${var.prefix}-ingress"
+  name = "${var.prefix}-k8s-ingress"
   vip_subnet_id = openstack_networking_subnet_v2.cluster_network.id
   description = "Loadbalancer for service ingress"
 }
@@ -65,14 +65,14 @@ resource "openstack_networking_floatingip_v2" "ingress" {
 
 ### Ingress HTTP
 resource "openstack_lb_listener_v2" "ingress_http" {
-  name = "${var.prefix}-ingress-http"
+  name = "${var.prefix}-k8s-ingress-http"
   protocol = "TCP"
   protocol_port = 80
   loadbalancer_id = openstack_lb_loadbalancer_v2.ingress.id
 }
 
 resource "openstack_lb_pool_v2" "ingress_http" {
-  name = "${var.prefix}-ingress-http"
+  name = "${var.prefix}-k8s-ingress-http"
   protocol = "TCP"
   lb_method = "ROUND_ROBIN"
   listener_id = openstack_lb_listener_v2.ingress_http.id
@@ -87,7 +87,7 @@ resource "openstack_lb_member_v2" "ingress_http" {
 }
 
 resource "openstack_lb_monitor_v2" "ingress_http" {
-  name = "${var.prefix}-ingress-http"
+  name = "${var.prefix}-k8s-ingress-http"
   pool_id = openstack_lb_pool_v2.ingress_http.id
   type = "TCP"
   delay = 2
@@ -97,14 +97,14 @@ resource "openstack_lb_monitor_v2" "ingress_http" {
 
 ### Ingress HTTPS
 resource "openstack_lb_listener_v2" "ingress_https" {
-  name = "${var.prefix}-ingress-https"
+  name = "${var.prefix}-k8s-ingress-https"
   protocol = "TCP"
   protocol_port = 443
   loadbalancer_id = openstack_lb_loadbalancer_v2.ingress.id
 }
 
 resource "openstack_lb_pool_v2" "ingress_https" {
-  name = "${var.prefix}-ingress-https"
+  name = "${var.prefix}-k8s-ingress-https"
   protocol = "TCP"
   lb_method = "ROUND_ROBIN"
   listener_id = openstack_lb_listener_v2.ingress_https.id
@@ -112,7 +112,7 @@ resource "openstack_lb_pool_v2" "ingress_https" {
 
 resource "openstack_lb_member_v2" "ingress_https" {
   count = var.worker_count
-  name = format("%s-ingress-https-member-%02d", var.prefix, count.index+1)
+  name = format("%s-k8s-ingress-https-member-%02d", var.prefix, count.index+1)
   address = openstack_compute_instance_v2.worker[count.index].access_ip_v4
   protocol_port = 443
   pool_id = openstack_lb_pool_v2.ingress_https.id
@@ -120,7 +120,7 @@ resource "openstack_lb_member_v2" "ingress_https" {
 }
 
 resource "openstack_lb_monitor_v2" "ingress_https" {
-  name = "${var.prefix}-ingress-https"
+  name = "${var.prefix}-k8s-ingress-https"
   pool_id = openstack_lb_pool_v2.ingress_https.id
   type = "TCP"
   delay = 2

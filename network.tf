@@ -1,3 +1,4 @@
+### K8s cluster network
 resource "openstack_networking_network_v2" "cluster_network" {
   name = "${var.prefix}-cluster-network"
   admin_state_up = true
@@ -26,10 +27,45 @@ resource "openstack_networking_router_interface_v2" "external" {
   subnet_id = openstack_networking_subnet_v2.cluster_network.id
 }
 
-### SSH
+### Additional routes
+resource "openstack_networking_router_v2" "additional_router" {
+  for_each = var.additional_routes
+  name = "${var.prefix}-additional-router-${each.key}"
+  admin_state_up = true
+  external_network_id = each.value.network_id
+  availability_zone_hints = var.availability_zone_hints_network
+}
+
+resource "openstack_networking_port_v2" "additional_router" {
+  for_each = var.additional_routes
+  name = "${var.prefix}-additional-router-${each.key}"
+  admin_state_up = true
+  port_security_enabled = false
+  network_id = openstack_networking_network_v2.cluster_network.id
+
+  fixed_ip {
+    subnet_id = openstack_networking_subnet_v2.cluster_network.id
+    ip_address = each.value.router_ip_address
+  }
+}
+
+resource "openstack_networking_router_interface_v2" "additional_router_interface" {
+  for_each = var.additional_routes
+  router_id = openstack_networking_router_v2.additional_router[each.key].id
+  port_id = openstack_networking_port_v2.additional_router[each.key].id
+}
+
+resource "openstack_networking_subnet_route_v2" "additional_route" {
+  for_each = var.additional_routes
+  destination_cidr = each.value.network_cidr
+  subnet_id = openstack_networking_subnet_v2.cluster_network.id
+  next_hop = each.value.router_ip_address
+}
+
+### SSH security group
 resource "openstack_networking_secgroup_v2" "ssh" {
   name = "${var.prefix}-ssh"
-  description = "SSH for bastion host"
+  description = "SSH to bastion host"
 }
 
 resource "openstack_networking_secgroup_rule_v2" "ssh" {
@@ -41,7 +77,7 @@ resource "openstack_networking_secgroup_rule_v2" "ssh" {
   port_range_max = 22
 }
 
-### K8s API
+### K8s API security group
 resource "openstack_networking_secgroup_v2" "k8s_api" {
   name = "${var.prefix}-k8s-api"
   description = "Kubernetes API"
@@ -56,7 +92,7 @@ resource "openstack_networking_secgroup_rule_v2" "k8s_api" {
   port_range_max = var.kubernetes_api_port
 }
 
-### Ingress
+### Ingress security group
 resource "openstack_networking_secgroup_v2" "k8s_ingress" {
   name = "${var.prefix}-k8s-ingress"
   description = "Kubernetes Ingress"
@@ -80,7 +116,7 @@ resource "openstack_networking_secgroup_rule_v2" "k8s_ingress_https" {
   port_range_max = 443
 }
 
-### K8s NodePort range
+### K8s NodePort Range security group
 resource "openstack_networking_secgroup_v2" "k8s_nodeport_range" {
   name = "${var.prefix}-k8s_nodeport_range"
   description = "Kubernetes NodePort range"
