@@ -28,6 +28,16 @@ variable "availability_zone_hints_network" {
   default = ["south-2"]
 }
 
+variable "use_octavia" {
+  description = "Use Octavia LBaaSv2"
+  default = true
+}
+
+variable "insecure" {
+  description = "Disable server certificate verification"
+  default = false
+}
+
 variable "kubernetes_api_port" {
   description = "Kubernetes API port"
   default = 6443

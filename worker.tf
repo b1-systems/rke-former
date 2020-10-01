@@ -2,7 +2,7 @@ data "template_file" "cloud_config_worker" {
   count = var.worker_count
   template = file("${path.module}/template.d/cloud-config.yml.tpl")
   vars = {
-    hostname = format("%s-worker-%02d", var.prefix, count.index+1)
+    hostname = format("%s-worker-%02d", var.prefix, count.index + 1)
     ssh_login_user = var.ssh_login_user
     ssh_pubkey = file(var.ssh_pubkey_file)
     hosts = fileexists(var.hosts) ? file(var.hosts) : ""
@@ -23,7 +23,7 @@ data "template_cloudinit_config" "worker" {
 
 resource "openstack_compute_instance_v2" "worker" {
   count = var.worker_count
-  name = format("%s-worker-%02d", var.prefix, count.index+1)
+  name = format("%s-worker-%02d", var.prefix, count.index + 1)
   config_drive = true
   image_name = var.image_nodes
   flavor_name = var.flavor_worker

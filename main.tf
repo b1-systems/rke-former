@@ -1,10 +1,6 @@
-terraform {
-  required_version = ">= 0.12"
-}
-
 provider "openstack" {
-  insecure = true
-  use_octavia = true
+  insecure = var.insecure
+  use_octavia = var.use_octavia
 }
 
 data "openstack_identity_auth_scope_v3" "scope" {

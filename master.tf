@@ -2,7 +2,7 @@ data "template_file" "cloud_config_master" {
   count = var.master_count
   template = file("${path.module}/template.d/cloud-config.yml.tpl")
   vars = {
-    hostname = format("%s-master-%02d", var.prefix, count.index+1)
+    hostname = format("%s-master-%02d", var.prefix, count.index + 1)
     ssh_login_user = var.ssh_login_user
     ssh_pubkey = file(var.ssh_pubkey_file)
     hosts = fileexists(var.hosts) ? file(var.hosts) : ""
@@ -23,7 +23,7 @@ data "template_cloudinit_config" "master" {
 
 resource "openstack_compute_instance_v2" "master" {
   count = var.master_count
-  name = format("%s-master-%02d", var.prefix, count.index+1)
+  name = format("%s-master-%02d", var.prefix, count.index + 1)
   config_drive = true
   image_name = var.image_nodes
   flavor_name = var.flavor_master

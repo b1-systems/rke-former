@@ -8,7 +8,7 @@ resource "openstack_lb_loadbalancer_v2" "k8s_cluster" {
 resource "openstack_networking_floatingip_v2" "k8s_cluster" {
   pool = var.external_network_name
   port_id = openstack_lb_loadbalancer_v2.k8s_cluster.vip_port_id
-  description = "Kubernetes API (${var.prefix})"
+  description = "Kubernetes Cluster API (${var.prefix})"
 }
 
 ### K8s API

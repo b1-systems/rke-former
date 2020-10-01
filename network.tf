@@ -29,7 +29,7 @@ resource "openstack_networking_router_interface_v2" "external" {
 ### SSH
 resource "openstack_networking_secgroup_v2" "ssh" {
   name = "${var.prefix}-ssh"
-  description = "SSH Ingress"
+  description = "SSH for bastion host"
 }
 
 resource "openstack_networking_secgroup_rule_v2" "ssh" {
@@ -44,7 +44,7 @@ resource "openstack_networking_secgroup_rule_v2" "ssh" {
 ### K8s API
 resource "openstack_networking_secgroup_v2" "k8s_api" {
   name = "${var.prefix}-k8s-api"
-  description = "Kubernetes API Ingress"
+  description = "Kubernetes API"
 }
 
 resource "openstack_networking_secgroup_rule_v2" "k8s_api" {
@@ -59,7 +59,7 @@ resource "openstack_networking_secgroup_rule_v2" "k8s_api" {
 ### Ingress
 resource "openstack_networking_secgroup_v2" "k8s_ingress" {
   name = "${var.prefix}-k8s-ingress"
-  description = "Kubernetes Workload Ingress"
+  description = "Kubernetes Ingress"
 }
 
 resource "openstack_networking_secgroup_rule_v2" "k8s_ingress_http" {
@@ -83,7 +83,7 @@ resource "openstack_networking_secgroup_rule_v2" "k8s_ingress_https" {
 ### K8s NodePort range
 resource "openstack_networking_secgroup_v2" "k8s_nodeport_range" {
   name = "${var.prefix}-k8s_nodeport_range"
-  description = "Kubernetes NodePort Ingress"
+  description = "Kubernetes NodePort range"
 }
 
 resource "openstack_networking_secgroup_rule_v2" "k8s_nodeport_range" {
