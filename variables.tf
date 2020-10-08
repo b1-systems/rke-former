@@ -23,11 +23,6 @@ variable "external_network_name" {
   default = "external"
 }
 
-variable "external_network_id" {
-  description = "ID of external network"
-  default = "293bea64-1572-4016-b002-2da2060a888e"
-}
-
 variable "availability_zone_hints_compute" {
   description = "Availability zone to use for compute resources"
   default = ["nova"]
