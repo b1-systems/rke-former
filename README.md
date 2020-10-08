@@ -1,6 +1,6 @@
 # RKE-Former
 
-Kubernetes on OpenStack with the help of Terraform and Rancher RKE
+Kubernetes on OpenStack with the help of Terraform and RancherKubernetesEngine (RKE)
 
 ## Requirements
 
@@ -29,12 +29,14 @@ export TF_VAR_openstack_password=$OS_PASSWORD
 ## Basic Configuration
 
 Set the number of Kubernetes master and worker nodes that should be deployed.
+Set the name of the external network you want to use to access the cluster.
 
 ```shell
 cat > terraform.tfvars <<EOF
 prefix = "rke"
 master_count = 1
 worker_count = 3
+external_network_name = "external"
 ssh_identity_file = "~/.ssh/YOUR_SSH_KEY"
 ssh_pubkey_file = "~/.ssh/YOUR_SSH_KEY_PUB"
 EOF
@@ -72,6 +74,26 @@ kubectl config set clusters.local.server $(terraform output k8s_api_url)
 
 # list nodes
 kubectl get nodes --output wide
+```
+
+## Define additional routes to networks
+
+Additional network routes are defined in a map `additional_routes`.
+The `router_ip_address` is an IP from the k8s cluster network defined
+by the network cidr at variable `cluster_network_cidr`. Make sure the
+IP is not taken already. `network_id` defines the id of the neutron network
+you want to connect to. A router will be created automatically.
+`network_cidr` is the network cidr of the network you want to reach.
+
+terraform.tfvars:
+```yaml
+additional_routes = {
+  "ceph-frontend" = {
+    router_ip_address = "10.0.10.5"
+    network_id = "a49aae6e-d988-44ae-a4c2-980b106b6a61"
+    network_cidr = "172.16.100.0/24"
+  }
+}
 ```
 
 ## Links
