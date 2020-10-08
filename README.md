@@ -76,6 +76,17 @@ kubectl config set clusters.local.server $(terraform output k8s_api_url)
 kubectl get nodes --output wide
 ```
 
+## Add x509 certificates to Kubernetes
+
+If you need to add certificates to allow Kubernetes to accept connections
+to the Openstack API, put your certificates into a file named `ca-certs.pem` and
+place it into the root directory.
+
+## Add /etc/hosts file
+
+To add a manually crafted hosts file to the cluster nodes, put a file named
+`hosts` into the root directory.
+
 ## Define additional routes to networks
 
 Additional network routes are defined in a map `additional_routes`.
