@@ -2,7 +2,7 @@ locals {
   hosts = {
     for instance in concat(openstack_compute_instance_v2.master,
                            openstack_compute_instance_v2.worker):
-      instance.name => instance.network.0.fixed_ip_v4
+      instance.name => instance.access_ip_v4
   }
 }
 
