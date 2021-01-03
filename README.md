@@ -29,7 +29,7 @@ export TF_VAR_openstack_password=$OS_PASSWORD
 ## Basic Configuration
 
 Set the number of Kubernetes master and worker nodes that should be deployed.
-Set the name of the external network you want to use to access the cluster.
+Set the name of the external network you want to use for accessing the cluster.
 
 ```shell
 cat > terraform.tfvars <<EOF
@@ -57,8 +57,8 @@ ssh -F ssh_config bastion
 
 ## Kubernetes Deployment via RKE
 
-Before running _rke_ command make sure your ssh-key is added to your ssh-agent,
-so _rke_ can connect to all hosts through the bastion host.
+Before running _rke_ command make sure your ssh-agent is containing your
+ssh-key, to allow _rke_ to connect to all hosts through the bastion host.
 
 ```shell
 rke up
@@ -84,8 +84,8 @@ place it into the root directory.
 
 ## Add /etc/hosts file
 
-To add a manually crafted hosts file to the cluster nodes, put a file named
-`hosts` into the root directory.
+Add a manually crafted hosts file named `hosts` into the root directory, to
+make it available on the cluster nodes.
 
 ## Define additional routes to networks
 
