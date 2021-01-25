@@ -76,6 +76,57 @@ kubectl config set clusters.local.server $(terraform output k8s_api_url)
 kubectl get nodes --output wide
 ```
 
+## Accessing K8s API and Ingress
+
+_rke-former_ has created a load balancer and floating IP for the Kubernetes API
+and the Ingress Service. Find the load balancers and corresponding floating IPs
+in your Openstack project.
+
+```shell
+openstack loadbalancer list -c name -c vip_address
++-----------------+-------------+
+| name            | vip_address |
++-----------------+-------------+
+| rke-k8s-cluster | 10.0.10.180 |
+| rke-ingress     | 10.0.10.37  |
++-----------------+-------------+
+```
+
+```shell
+openstack floating ip list -c "Floating IP Address" -c "Fixed IP Address"
++---------------------+------------------+
+| Floating IP Address | Fixed IP Address |
++---------------------+------------------+
+| 10.49.170.213       | 10.0.10.37       |
+| 10.49.170.182       | 10.0.10.180      |
++---------------------+------------------+
+```
+
+Create an Ingress and access the Ingress using the floating IP for the Ingress
+load balancer.
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minimal-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /my-app
+        pathType: Prefix
+        backend:
+          service:
+            name: test
+            port:
+              number: 80
+```
+
+The app is accessible at http://10.49.170.213/my-app
+
 ## Add x509 certificates to Kubernetes
 
 If you need to add certificates to allow Kubernetes to accept connections
