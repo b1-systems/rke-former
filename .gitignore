@@ -6,6 +6,7 @@ id_rsa*
 terraform*
 !terraform.tfvars
 .terraform.tfstate.lock.info
+.terraform.lock.hcl
 ssh_config
 cluster.yml
 cluster.rkestate
