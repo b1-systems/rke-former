@@ -1,6 +1,8 @@
 ---
 # RancherKubernetesEngine (rke) configuration file
 
+cluster_name: ${cluster_name}
+
 bastion_host:
   address: ${bastion_ip}
   user: ${ssh_login_user}
@@ -13,8 +15,8 @@ nodes:
     user: ${ssh_login_user}
     ssh_key_path: ${ssh_identity_file}
     role:
-        - controlplane
-        - etcd
+      - controlplane
+      - etcd
 %{ endfor ~}
 %{ for ip_address in worker_ips ~}
   - address: ${ip_address}
@@ -22,7 +24,7 @@ nodes:
     user: ${ssh_login_user}
     ssh_key_path: ${ssh_identity_file}
     role:
-        - worker
+      - worker
 %{ endfor ~}
 
 network:
@@ -44,7 +46,7 @@ services:
       - "/usr/share/ca-certificates:/usr/share/ca-certificates"
 %{ endif ~}
   kube-api:
-    extra_args:  
+    extra_args:
       external-hostname: ${api_ip_address}
 
 kubernetes_version: "${kubernetes_version}"

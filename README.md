@@ -64,7 +64,7 @@ ssh-key, to allow _rke_ to connect to all hosts through the bastion host.
 rke up
 ```
 
-## Use The kubeconfig
+## Use the kubeconfig
 
 ```shell
 export KUBECONFIG=$PWD/kube_config_cluster.yml
@@ -79,27 +79,16 @@ kubectl get nodes --output wide
 ## Accessing K8s API and Ingress
 
 _rke-former_ has created a load balancer and floating IP for the Kubernetes API
-and the Ingress Service. Find the load balancers and corresponding floating IPs
-in your Openstack project.
+and the Ingress Service. You can find the load balancers and corresponding
+floating IPs in your Openstack project. Or use `terraform output` to print the
+URLs.
 
 ```shell
-openstack loadbalancer list -c name -c vip_address
-+-----------------+-------------+
-| name            | vip_address |
-+-----------------+-------------+
-| rke-k8s-cluster | 10.0.10.180 |
-| rke-ingress     | 10.0.10.37  |
-+-----------------+-------------+
+terraform output k8s_api_url
 ```
 
 ```shell
-openstack floating ip list -c "Floating IP Address" -c "Fixed IP Address"
-+---------------------+------------------+
-| Floating IP Address | Fixed IP Address |
-+---------------------+------------------+
-| 10.49.170.213       | 10.0.10.37       |
-| 10.49.170.182       | 10.0.10.180      |
-+---------------------+------------------+
+terraform output k8s_ingress_url
 ```
 
 Create an Ingress and access the Ingress using the floating IP for the Ingress
@@ -109,23 +98,24 @@ load balancer.
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: minimal-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+  name: my-app
 spec:
   rules:
-  - http:
-      paths:
-      - path: /my-app
-        pathType: Prefix
-        backend:
-          service:
-            name: test
-            port:
-              number: 80
+    - host: my-app.example.com
+        http:
+          paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              serviceName: my-app
+              servicePort: 8080
+  tls:
+    - secretName: my-app.example.com-tls
+      hosts:
+        - my-app.example.com
 ```
 
-The app is accessible at http://10.49.170.213/my-app
+The app is accessible at https://K8S_INGRESS_URL/my-app
 
 ## Add x509 certificates to Kubernetes
 

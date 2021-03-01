@@ -3,6 +3,11 @@ variable "prefix" {
   default = "rke"
 }
 
+variable "cluster_name" {
+  description = "Name of the Kubernetes cluster"
+  default = "KubernetesCluster"
+}
+
 variable "master_count" {
   description = "Amount of master nodes to spawn up"
   default = 1
@@ -67,15 +72,14 @@ variable "openstack_password" {
 }
 
 variable "cluster_network_cidr" {
-  description = "Kubernetes cluster network address"
+  description = "Cluster network address"
   default = "10.0.10.0/24"
 }
 
 variable "cluster_network_mtu" {
-  description = "MTU for Kubernetes cluster network"
+  description = "MTU for cluster network"
   default = "1450"
 }
-
 
 variable "ssh_identity_file" {
   description = "Location of SSH identity file"

@@ -127,3 +127,8 @@ resource "openstack_lb_monitor_v2" "ingress_https" {
   timeout = 2
   max_retries = 2
 }
+
+output "k8s_ingress_url" {
+  value = format("https://%s",
+                 openstack_networking_floatingip_v2.ingress.address)
+}
