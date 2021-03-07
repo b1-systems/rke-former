@@ -13,9 +13,16 @@ Kubernetes on OpenStack with the help of Terraform and RancherKubernetesEngine (
 Using `clouds.yaml`:
 
 ```shell
-export OS_CLOUD=<section>
+export TF_VAR_openstack_cloud=<section>
 export TF_VAR_openstack_auth_url=$(openstack configuration show -c auth.auth_url -f value)
 export TF_VAR_openstack_password=$(openstack configuration show -c auth.password -f value --unmask)
+```
+
+Or you can set those variables in your `terraform.tfvars` file.
+```
+openstack_cloud = "betacloud"
+openstack_auth_url = "https://<api-url-goes-here>"
+openstack_password = "secret123"
 ```
 
 Using `openrc.sh`:
@@ -32,7 +39,7 @@ Set the number of Kubernetes master and worker nodes that should be deployed.
 Set the name of the external network you want to use for accessing the cluster.
 
 ```shell
-cat > terraform.tfvars <<EOF
+cat >> terraform.tfvars <<EOF
 prefix = "rke"
 master_count = 1
 worker_count = 3
