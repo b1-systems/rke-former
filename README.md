@@ -38,15 +38,14 @@ export TF_VAR_openstack_password=$OS_PASSWORD
 Set the number of Kubernetes master and worker nodes that should be deployed.
 Set the name of the external network you want to use for accessing the cluster.
 
+Add the following to the file `terraform.tfvars`:
 ```shell
-cat >> terraform.tfvars <<EOF
 prefix = "rke"
 master_count = 1
 worker_count = 3
 external_network_name = "external"
 ssh_identity_file = "~/.ssh/YOUR_SSH_KEY"
 ssh_pubkey_file = "~/.ssh/YOUR_SSH_KEY_PUB"
-EOF
 ```
 
 ## Deploy Kubernetes Nodes on OpenStack-Cloud
