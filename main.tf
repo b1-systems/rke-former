@@ -1,4 +1,5 @@
 provider "openstack" {
+  cloud = var.openstack_cloud
   insecure = var.insecure
   use_octavia = var.use_octavia
 }

@@ -38,6 +38,10 @@ variable "availability_zone_hints_network" {
   default = ["nova"]
 }
 
+variable "openstack_cloud" {
+  description = "Which cloud to use from clouds.yml"
+}
+
 variable "use_octavia" {
   description = "Use Octavia LBaaSv2"
   default = true
