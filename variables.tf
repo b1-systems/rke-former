@@ -40,6 +40,7 @@ variable "availability_zone_hints_network" {
 
 variable "openstack_cloud" {
   description = "Which cloud to use from clouds.yml"
+  type = string
 }
 
 variable "use_octavia" {
