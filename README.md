@@ -43,7 +43,6 @@ Add the following to the file `terraform.tfvars`:
 prefix = "rke"
 master_count = 1
 worker_count = 3
-external_network_name = "external"
 ssh_identity_file = "~/.ssh/YOUR_SSH_KEY"
 ssh_pubkey_file = "~/.ssh/YOUR_SSH_KEY_PUB"
 ```
