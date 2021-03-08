@@ -4,7 +4,6 @@ id_rsa*
 *openrc.sh
 .terraform
 terraform*
-!terraform.tfvars
 .terraform.tfstate.lock.info
 .terraform.lock.hcl
 ssh_config
