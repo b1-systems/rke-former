@@ -18,6 +18,11 @@ export TF_VAR_openstack_auth_url=$(openstack configuration show -c auth.auth_url
 export TF_VAR_openstack_password=$(openstack configuration show -c auth.password -f value --unmask)
 ```
 
+Of course you can just set TF_VAR_openstack_cloud to use the value of `$OS_CLOUD` if this is already set in your environment:
+```
+export TF_VAR_openstack_cloud=$OS_CLOUD
+```
+
 Using `openrc.sh`:
 
 ```shell
