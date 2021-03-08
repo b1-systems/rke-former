@@ -18,13 +18,6 @@ export TF_VAR_openstack_auth_url=$(openstack configuration show -c auth.auth_url
 export TF_VAR_openstack_password=$(openstack configuration show -c auth.password -f value --unmask)
 ```
 
-Or you can set those variables in your `terraform.tfvars` file.
-```
-openstack_cloud = "betacloud"
-openstack_auth_url = "https://<api-url-goes-here>"
-openstack_password = "secret123"
-```
-
 Using `openrc.sh`:
 
 ```shell
@@ -32,6 +25,13 @@ source openrc.sh
 export TF_VAR_openstack_cloud=$OS_CLOUD
 export TF_VAR_openstack_auth_url=$OS_AUTH_URL
 export TF_VAR_openstack_password=$OS_PASSWORD
+```
+
+Or you can set those variables in your `terraform.tfvars` file.
+```
+openstack_cloud = "betacloud"
+openstack_auth_url = "https://<api-url-goes-here>"
+openstack_password = "secret123"
 ```
 
 ## Basic Configuration
