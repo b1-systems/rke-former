@@ -151,7 +151,6 @@ additional_routes = {
 ## Links
 
 - RancherKubernetesEngine (rke) [Docs](https://rancher.com/docs/rke/latest/)
-- K8spin - a Kubernetes Namespace for free, check it out [K8spin](https://k8spin.cloud/)
 
 ## Contribute
 
