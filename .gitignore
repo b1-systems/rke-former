@@ -2,9 +2,11 @@
 .venv
 id_rsa*
 *openrc.sh
-.terraform
-terraform*
+terraform.tfvars
+terraform.tfstate
+terraform.tfstate.backup
 .terraform.tfstate.lock.info
+.terraform
 .terraform.lock.hcl
 ssh_config
 cluster.yml
