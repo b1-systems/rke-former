@@ -27,7 +27,7 @@ Using `openrc.sh`:
 
 ```shell
 source openrc.sh
-export TF_VAR_openstack_cloud=$OS_CLOUD
+export TF_VAR_openstack_cloud=<section>
 export TF_VAR_openstack_auth_url=$OS_AUTH_URL
 export TF_VAR_openstack_password=$OS_PASSWORD
 ```
