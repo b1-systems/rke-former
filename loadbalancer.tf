@@ -44,12 +44,6 @@ resource "openstack_lb_monitor_v2" "k8s_api" {
   max_retries = 2
 }
 
-output "k8s_api_url" {
-  value = format("https://%s:%s",
-                 openstack_networking_floatingip_v2.k8s_cluster.address,
-                 var.kubernetes_api_port)
-}
-
 ### Service Ingress Loadbalancer
 resource "openstack_lb_loadbalancer_v2" "ingress" {
   name = "${var.prefix}-k8s-ingress"
@@ -126,9 +120,4 @@ resource "openstack_lb_monitor_v2" "ingress_https" {
   delay = 2
   timeout = 2
   max_retries = 2
-}
-
-output "k8s_ingress_url" {
-  value = format("https://%s",
-                 openstack_networking_floatingip_v2.ingress.address)
 }

@@ -40,13 +40,6 @@ write_files:
     permissions: '0644'
 %{ endif ~}
 
-%{ if trusted_ca_certs != "" ~}
-ca-certs:
-  trusted:
-    - |
-      ${indent(6,trusted_ca_certs)}
-%{ endif ~}
-
 write_files:
   - path: /etc/ssh/sshd_config
     content: |

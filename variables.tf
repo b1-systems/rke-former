@@ -63,14 +63,6 @@ variable "kubernetes_nodeport_range_max" {
   default = 32767
 }
 
-variable "openstack_auth_url" {
-  description = "OpenStack auth_url for Kubernetes Provider Plugin"
-
-}
-variable "openstack_password" {
-  description = "OpenStack Password for Kubernetes Provider Plugin"
-}
-
 variable "cluster_network_cidr" {
   description = "Cluster network address"
   default = "10.0.10.0/24"
@@ -124,11 +116,6 @@ variable "image_nodes" {
 variable "hosts" {
   description = "Unix hosts file to include on master and worker nodes"
   default = "hosts"
-}
-
-variable "trusted_ca_certs" {
-  description = "File with trusted CA certificates in PEM format"
-  default = "ca-certs.pem"
 }
 
 variable "additional_routes" {

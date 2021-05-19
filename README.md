@@ -14,16 +14,12 @@ Using `clouds.yaml`:
 
 ```shell
 export OS_CLOUD=<section>
-export TF_VAR_openstack_auth_url=$(openstack configuration show -c auth.auth_url -f value)
-export TF_VAR_openstack_password=$(openstack configuration show -c auth.password -f value --unmask)
 ```
 
-Using `openrc.sh`:
+Using `openrc.sh` or Keystone app-credentials:
 
 ```shell
 source openrc.sh
-export TF_VAR_openstack_auth_url=$OS_AUTH_URL
-export TF_VAR_openstack_password=$OS_PASSWORD
 ```
 
 ## Basic Configuration
@@ -117,12 +113,6 @@ spec:
 
 The app is accessible at https://K8S_INGRESS_URL/my-app
 
-## Add x509 certificates to Kubernetes
-
-If you need to add certificates to allow Kubernetes to accept connections
-to the Openstack API, put your certificates into a file named `ca-certs.pem` and
-place it into the root directory.
-
 ## Add /etc/hosts file
 
 Add a manually crafted hosts file named `hosts` into the root directory, to
@@ -146,6 +136,44 @@ additional_routes = {
     network_cidr = "172.16.100.0/24"
   }
 }
+```
+
+## Install Cinder CSI (cloud-provider-openstack)
+
+Using Cinder CSI you can provision persistent volume claims right from Cinder.
+
+Create Helm chart values file `values.yaml`.
+
+```yaml
+---
+storageClass:
+  delete:
+    isDefault: true
+secret:
+  create: true
+  enabled: true
+  name: cloud-config
+  data:
+    cloud-config: |-
+      [Global]
+      tls-insecure = false
+      auth-url = OPENSTACK_API_URL
+      application-credential-id = ID
+      application-credential-secret = SECRET
+      [BlockStorage]
+      ignore-volume-az = true
+```
+
+Add Helm repository for `cloud-provider-openstack´.
+
+```shell
+helm repo add cpo https://kubernetes.github.io/cloud-provider-openstack
+```
+
+Deploy Cinder CSI.
+
+```shell
+helm install -n kube-system cinder-csi cpo/openstack-cinder-csi -f values.yaml
 ```
 
 ## Links
