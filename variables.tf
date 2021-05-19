@@ -20,7 +20,7 @@ variable "worker_count" {
 
 variable "kubernetes_version" {
   description = "RKE supported Kubernetes to install"
-  default = "v1.18.8-rancher1-1"
+  default = "v1.20.6-rancher1-1"
 }
 
 variable "external_network_name" {
