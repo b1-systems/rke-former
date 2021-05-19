@@ -4,7 +4,7 @@ Kubernetes on OpenStack with the help of Terraform and RancherKubernetesEngine (
 
 ## Requirements
 
-- [Terraform (v0.12+)](https://www.terraform.io/downloads.html)
+- [Terraform (v0.14+)](https://www.terraform.io/downloads.html)
 
 ## Export OpenStack api url and user password
 
