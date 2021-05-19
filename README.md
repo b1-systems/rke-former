@@ -64,7 +64,7 @@ correct the API endpoint to use the loadbalancer address.
 kubectl config set clusters.local.server $(terraform output k8s_api_url)
 ```
 
-# list nodes
+## list nodes
 
 ```shell
 kubectl get nodes --output wide
@@ -155,7 +155,7 @@ secret:
     cloud-config: |-
       [Global]
       tls-insecure = false
-      auth-url = OPENSTACK_API_URL
+      auth-url = OPENSTACK_AUTH_URL
       application-credential-id = ID
       application-credential-secret = SECRET
       [BlockStorage]
