@@ -17,6 +17,17 @@ packages:
 
 runcmd:
   - systemctl enable --now docker
+%{ if hostname == "bastion" ~}
+  - curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.20.6/bin/linux/amd64/kubectl
+  - install -m0755 kubectl /usr/local/bin/kubectl
+  - kubectl completion bash > /etc/bash_completion.d/kubectl
+  - curl -LO https://github.com/rancher/rke/releases/download/v1.2.8/rke_linux-amd64
+  - install -m0755 rke_linux-amd64 /usr/local/bin/rke
+  - curl -LO https://get.helm.sh/helm-v3.5.2-linux-amd64.tar.gz
+  - tar -xf helm-v3.5.2-linux-amd64.tar.gz linux-amd64/helm
+  - install -m0755 linux-amd64/helm /usr/local/bin/helm
+  - helm completion bash > /etc/bash_completion.d/helm
+%{ endif ~}
 
 groups:
   - docker

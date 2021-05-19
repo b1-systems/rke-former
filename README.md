@@ -5,8 +5,6 @@ Kubernetes on OpenStack with the help of Terraform and RancherKubernetesEngine (
 ## Requirements
 
 - [Terraform (v0.12+)](https://www.terraform.io/downloads.html)
-- [Rancher RKE (1.2.8)](https://github.com/rancher/rke/releases/tag/v1.2.8)
-- [Kubernetes CLI (v1.20.6+)](https://downloadkubernetes.com)
 
 ## Export OpenStack api url and user password
 
@@ -45,30 +43,30 @@ terraform init
 terraform apply -auto-approve
 ```
 
-## Test SSH connection to bastion host
+## Run RKE on the bastion host
 
 ```shell
+scp -F ssh_config cluster.yml bastion:
 ssh -F ssh_config bastion
-```
-
-## Kubernetes Deployment via RKE
-
-Before running _rke_ command make sure your ssh-agent is containing your
-ssh-key, to allow _rke_ to connect to all hosts through the bastion host.
-
-```shell
-rke up
+rancher@bastion:~$ rke up
 ```
 
 ## Use the kubeconfig
 
 ```shell
 export KUBECONFIG=$PWD/kube_config_cluster.yml
+```
 
-# correct the API endpoint to loadbalancer
+When using the kubeconfig from a host outside of the OpenStack project,
+correct the API endpoint to use the loadbalancer address.
+
+```shell
 kubectl config set clusters.local.server $(terraform output k8s_api_url)
+```
 
 # list nodes
+
+```shell
 kubectl get nodes --output wide
 ```
 
@@ -186,8 +184,8 @@ Fork -> Patch -> Pull request -> Merge
 
 ## Author
 
-- Thorsten Schifferdecker <schifferdecker@b1-systems.de>
-- Uwe Grawert <grawert@b1-systems.de>
+- Thorsten Schifferdecker
+- Uwe Grawert
 
 ## License
 
