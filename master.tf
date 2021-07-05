@@ -26,13 +26,13 @@ resource "openstack_compute_instance_v2" "master" {
   config_drive = true
   image_name = var.image_nodes
   flavor_name = var.flavor_master
-  key_pair = openstack_compute_keypair_v2.ssh_key.name
+  key_pair = openstack_compute_keypair_v2.ssh_key.id
   user_data = data.template_cloudinit_config.master[count.index].rendered
   availability_zone_hints = var.availability_zone_hints_compute[count.index % length(var.availability_zone_hints_compute)]
   network { uuid = openstack_networking_network_v2.cluster_network.id }
   security_groups = [ "default",
-                      openstack_networking_secgroup_v2.k8s_api.name,
-                      openstack_networking_secgroup_v2.k8s_ingress.name,
-                      openstack_networking_secgroup_v2.k8s_nodeport_range.name
+                      openstack_networking_secgroup_v2.k8s_api.id,
+                      openstack_networking_secgroup_v2.k8s_ingress.id,
+                      openstack_networking_secgroup_v2.k8s_nodeport_range.id
                     ]
 }

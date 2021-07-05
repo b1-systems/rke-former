@@ -23,11 +23,11 @@ resource "openstack_compute_instance_v2" "bastion" {
   config_drive = true
   image_name = var.image_bastion
   flavor_name = var.flavor_bastion
-  key_pair = openstack_compute_keypair_v2.ssh_key.name
+  key_pair = openstack_compute_keypair_v2.ssh_key.id
   user_data = data.template_cloudinit_config.bastion.rendered
   availability_zone_hints = var.availability_zone_hints_compute[0]
   network { uuid = openstack_networking_network_v2.cluster_network.id }
-  security_groups = [ "default", openstack_networking_secgroup_v2.ssh.name ]
+  security_groups = [ "default", openstack_networking_secgroup_v2.ssh.id ]
 }
 
 resource "openstack_networking_floatingip_v2" "bastion" {
