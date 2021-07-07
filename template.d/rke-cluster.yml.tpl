@@ -42,6 +42,10 @@ services:
   kube-api:
     extra_args:
       external-hostname: ${api_ip_address}
+  kube-controller:
+    extra_args:
+      cluster-signing-cert-file: "/etc/kubernetes/ssl/kube-ca.pem"
+      cluster-signing-key-file: "/etc/kubernetes/ssl/kube-ca-key.pem"
 
 # we use an ssh-agent
 ssh_agent_auth: true
