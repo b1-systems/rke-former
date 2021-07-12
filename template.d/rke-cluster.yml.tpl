@@ -34,6 +34,7 @@ nodes:
 network:
   plugin: canal
   options: {}
+  mtu: ${mtu}
 
 authentication:
   strategy: x509
@@ -48,6 +49,11 @@ services:
     extra_args:
       cluster-signing-cert-file: "/etc/kubernetes/ssl/kube-ca.pem"
       cluster-signing-key-file: "/etc/kubernetes/ssl/kube-ca-key.pem"
+%{ if use_external_cloud_provider == true ~}
+  kubelet:
+    extra_args:
+      cloud-provider: external
+%{ endif ~}
 
 # we use an ssh-agent
 ssh_agent_auth: true

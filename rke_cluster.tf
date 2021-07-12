@@ -21,5 +21,7 @@ resource "local_file" "cluster_config" {
     ssh_login_user = var.ssh_login_user
     ssh_identity_file = var.ssh_identity_file
     kubernetes_version = var.kubernetes_version
+    use_external_cloud_provider = var.use_external_cloud_provider
+    mtu = var.cni_mtu
   })
 }

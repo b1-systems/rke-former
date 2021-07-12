@@ -136,42 +136,86 @@ additional_routes = {
 }
 ```
 
-## Install Cinder CSI (cloud-provider-openstack)
+## Install Cloud Provider Openstack
 
-Using Cinder CSI you can provision persistent volume claims right from Cinder.
-
-Create Helm chart values file `values.yaml`.
+### Create `cloud-config` secret
 
 ```yaml
 ---
-storageClass:
-  delete:
-    isDefault: true
-secret:
-  create: true
-  enabled: true
+apiVersion: v1
+kind: Secret
+metadata:
   name: cloud-config
-  data:
-    cloud-config: |-
-      [Global]
-      tls-insecure = false
-      auth-url = OPENSTACK_AUTH_URL
-      application-credential-id = ID
-      application-credential-secret = SECRET
-      [BlockStorage]
-      ignore-volume-az = true
+  namespace: kube-system
+type: Opaque
+stringData:
+  cloud.conf: |
+    [Global]
+    tls-insecure = false
+    application-credential-id = APP_ID
+    application-credential-secret = APP_SECRET
+    auth-url = https://YOUR_OPENSTACK_CLOUD:5000
+
+    [Networking]
+    public-network-name = external
+
+    [LoadBalancer]
+    create-monitor = true
+    floating-network-id = EXTERNAL_NET_ID
+    subnet-id = INTERNAL_SUBNET_ID
+
+    [BlockStorage]
+    ignore-volume-az = true
 ```
 
-Add Helm repository for `cloud-provider-openstack´.
+### Apply Openstack Cloud Controller Manager manifests
 
 ```shell
-helm repo add cpo https://kubernetes.github.io/cloud-provider-openstack
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/cloud-provider-openstack/master/manifests/controller-manager/cloud-controller-manager-roles.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/cloud-provider-openstack/master/manifests/controller-manager/cloud-controller-manager-role-bindings.yaml
 ```
 
-Deploy Cinder CSI.
+* Download the DaemonSet manifest
 
 ```shell
-helm install -n kube-system cinder-csi cpo/openstack-cinder-csi -f values.yaml
+curl -LO https://raw.githubusercontent.com/kubernetes/cloud-provider-openstack/master/manifests/controller-manager/openstack-cloud-controller-manager-ds.yaml
+```
+
+* Set the tolerations
+
+```yaml
+tolerations:
+  - key: node.cloudprovider.kubernetes.io/uninitialized
+    value: "true"
+    effect: NoSchedule
+  - key: node-role.kubernetes.io/controlplane
+    effect: NoSchedule
+  - key: node-role.kubernetes.io/etcd
+    effect: NoExecute
+```
+
+* Remove the node selector
+
+```shell
+nodeSelector:
+  node-role.kubernetes.io/master: ""
+```
+
+* Apply the DaemonSet manifest
+
+```shell
+kubectl apply -f openstack-cloud-controller-manager-ds.yaml
+```
+
+### Deploy Cinder CSI
+
+```shell
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/cloud-provider-openstack/master/manifests/cinder-csi-plugin/cinder-csi-controllerplugin-rbac.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/cloud-provider-openstack/master/manifests/cinder-csi-plugin/cinder-csi-controllerplugin.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/cloud-provider-openstack/master/manifests/cinder-csi-plugin/cinder-csi-nodeplugin-rbac.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/cloud-provider-openstack/master/manifests/cinder-csi-plugin/cinder-csi-nodeplugin.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/cloud-provider-openstack/master/manifests/cinder-csi-plugin/csi-cinder-driver.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/cloud-provider-openstack/master/manifests/cinder-csi-plugin/csi-secret-cinderplugin.yaml
 ```
 
 ## Links

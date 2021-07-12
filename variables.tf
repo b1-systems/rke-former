@@ -38,6 +38,11 @@ variable "availability_zone_hints_network" {
   default = ["nova"]
 }
 
+variable "use_external_cloud_provider" {
+  description = "Use external cloud provider"
+  default = true
+}
+
 variable "use_octavia" {
   description = "Use Octavia LBaaSv2"
   default = true
@@ -71,6 +76,11 @@ variable "cluster_network_cidr" {
 variable "cluster_network_mtu" {
   description = "MTU for cluster network"
   default = "1450"
+}
+
+variable "cni_mtu" {
+  description = "MTU for CNI plugin"
+  default = "1400"
 }
 
 variable "ssh_identity_file" {
