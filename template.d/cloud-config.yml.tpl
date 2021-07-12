@@ -8,12 +8,14 @@ apt_upgrade: false
 
 packages:
   - software-properties-common
+  - bash-completion
   - inetutils-ping
   - docker.io
   - dnsutils
   - screen
   - less
   - vim
+  - jq
 
 runcmd:
   - systemctl enable --now docker
