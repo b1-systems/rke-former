@@ -6,7 +6,7 @@ locals {
   }
 }
 
-resource "local_file" "bastion_ssh_config" {
+resource "local_file" "ssh_config" {
   filename = "ssh_config"
   file_permission = "0644"
   content = templatefile("${path.module}/template.d/ssh_config.tpl", {

@@ -5,11 +5,11 @@ locals {
   worker_ip_addresses = openstack_compute_instance_v2.worker.*.access_ip_v4
 }
 
-resource "local_file" "cluster_config" {
+resource "local_file" "rke_cluster_config" {
   filename = "${path.module}/cluster.yml"
   directory_permission = "750"
   file_permission = "600"
-  content = templatefile("${path.module}/template.d/rke-cluster.yml.tpl", {
+  content = templatefile("${path.module}/template.d/rke_cluster_config.yml.tpl", {
     cluster_name = var.cluster_name
     bastion_ip = openstack_compute_floatingip_associate_v2.bastion.floating_ip
     master_hostnames = local.master_hostnames
