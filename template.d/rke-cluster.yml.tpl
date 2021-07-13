@@ -11,18 +11,20 @@ bastion_host:
   ssh_key_path: ${ssh_identity_file}
 
 nodes:
-%{ for ip_address in master_ips ~}
+%{ for index, ip_address in master_ip_addresses ~}
   - address: ${ip_address}
     internal_address: ${ip_address}
+    hostname_override: ${master_hostnames[index]}
     user: ${ssh_login_user}
     ssh_key_path: ${ssh_identity_file}
     role:
       - controlplane
       - etcd
 %{ endfor ~}
-%{ for ip_address in worker_ips ~}
+%{ for index, ip_address in worker_ip_addresses ~}
   - address: ${ip_address}
     internal_address: ${ip_address}
+    hostname_override: ${worker_hostnames[index]}
     user: ${ssh_login_user}
     ssh_key_path: ${ssh_identity_file}
     role:
