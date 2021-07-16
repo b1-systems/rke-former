@@ -45,15 +45,23 @@ users:
 
 %{ if hosts != "" ~}
 manage_etc_hosts: false
-write_files:
-  - path: /etc/hosts
-    content: |
-      ${indent(6,hosts)}
-    owner: root:root
-    permissions: '0644'
 %{ endif ~}
 
 write_files:
+%{ if hosts != "" ~}
+  - path: /etc/hosts
+    content: |
+      ${indent(6,hosts)}
+%{ endif ~}
+  - path: /etc/docker/daemon.json
+    content: |
+      {
+        "log-driver": "json-file",
+        "log-opts": {
+          "max-size": "25m",
+          "max-file": "3"
+        }
+      }
   - path: /etc/ssh/sshd_config
     content: |
       HostKey /etc/ssh/ssh_host_rsa_key
