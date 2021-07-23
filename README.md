@@ -33,6 +33,8 @@ worker_count = 3
 external_network_name = "external"
 ssh_identity_file = "~/.ssh/YOUR_SSH_KEY"
 ssh_pubkey_file = "~/.ssh/YOUR_SSH_KEY_PUB"
+availability_zone_hints_compute = ["nova"]
+availability_zone_hints_network = ["nova"]
 EOF
 ```
 
