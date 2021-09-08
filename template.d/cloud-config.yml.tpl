@@ -43,6 +43,13 @@ users:
     ssh_authorized_keys:
       - ${ssh_pubkey}
 
+%{ if certificates != "" ~}
+ca-certs:
+  trusted:
+    - |
+      ${indent(6,certificates)}
+%{ endif ~}
+
 %{ if hosts != "" ~}
 manage_etc_hosts: false
 %{ endif ~}

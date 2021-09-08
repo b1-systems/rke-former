@@ -5,6 +5,7 @@ data "template_file" "cloud_config_bastion" {
     ssh_login_user = var.ssh_login_user
     ssh_pubkey = file(var.ssh_pubkey_file)
     hosts = fileexists(var.hosts) ? file(var.hosts) : ""
+    certificates = fileexists(var.certificates) ? file(var.certificates) : ""
   }
 }
 

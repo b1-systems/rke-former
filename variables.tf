@@ -134,6 +134,11 @@ variable "hosts" {
   default = "hosts"
 }
 
+variable "certificates" {
+  description = "x509 certificates file to include on master and worker nodes"
+  default = "certificates"
+}
+
 variable "additional_routes" {
   description = "Define routes to additional networks"
   default = {}
