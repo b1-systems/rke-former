@@ -59,5 +59,7 @@ services:
 ssh_agent_auth: true
 
 private_registries:
-  - url: docker.io
-    is_default: true
+%{ for registry in docker_registries ~}
+  - url: ${registry.url}
+    is_default: ${registry.is_default}
+%{ endfor ~}

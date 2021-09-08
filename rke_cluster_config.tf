@@ -20,6 +20,7 @@ resource "local_file" "rke_cluster_config" {
     cluster_name = var.cluster_name
     ssh_login_user = var.ssh_login_user
     ssh_identity_file = var.ssh_identity_file
+    docker_registries = var.docker_registries
     kubernetes_version = var.kubernetes_version
     use_external_cloud_provider = var.use_external_cloud_provider
     subnet_id = openstack_networking_subnet_v2.cluster_network.id

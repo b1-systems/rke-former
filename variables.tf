@@ -23,6 +23,12 @@ variable "kubernetes_version" {
   default = "v1.20.8-rancher1-1"
 }
 
+variable "docker_registries" {
+  description = "List of Docker registries to use"
+  type = list(object({url=string, is_default=bool}))
+  default = [{url = "docker.io", is_default = true}]
+}
+
 variable "external_network_name" {
   description = "Name of external network making the cluster reachable via FIP"
   default = "external"
